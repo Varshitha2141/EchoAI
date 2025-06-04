@@ -2,8 +2,7 @@ name: Build and Test EchoAI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
@@ -18,18 +17,21 @@ jobs:
         with:
           node-version: '18'
 
+      # Frontend install & build
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm install
 
       - name: Build frontend
         working-directory: frontend
         run: npm run build
 
+      # Backend install
       - name: Install backend dependencies
         working-directory: backend
-        run: npm ci
+        run: npm install
 
+      # (Optional) Run Datadog Synthetic tests
       - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v1.4.0
         with:
