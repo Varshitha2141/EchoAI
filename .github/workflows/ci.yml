@@ -1,37 +1,47 @@
-name: Build and Deploy EchoStack
+name: Build MERN Project
 
 on:
   push:
-    branches:
-      - main   # or your default branch
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      # Setup Node.js for frontend
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
-      - name: Install backend dependencies
-        working-directory: backend
-        run: npm install
-
-      - name: Run backend tests (optional)
-        working-directory: backend
-        run: npm test
-
+      # Install frontend dependencies
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm install
 
+      # Build frontend
       - name: Build frontend
         working-directory: frontend
         run: npm run build
 
-      # Add deploy steps here, e.g. upload artifacts, or deploy to your hosting service
+      # Setup Node.js for backend (same Node version)
+      - name: Setup Node.js (backend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Install backend dependencies
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
+
+      # (Optional) Run backend tests or lint here
+      # - name: Run backend tests
+      #   working-directory: backend
+      #   run: npm test
